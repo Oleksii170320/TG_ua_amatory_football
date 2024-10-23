@@ -1,31 +1,30 @@
 from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
-                           InlineKeyboardMarkup, InlineKeyboardButton)
+                           InlineKeyboardButton)
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from app.database.requests import get_categories, get_category_item
+from app.services.requests import get_region_item, get_regions_list
 
-main = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Каталог')],
-                                     [KeyboardButton(text='Корзина')],
-                                     [KeyboardButton(text='Контакты'),
-                                      KeyboardButton(text='О нас')]],
+main = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='Список областей')],
+                                     [KeyboardButton(text='Контакти'),
+                                      KeyboardButton(text='Про нас')]],
                            resize_keyboard=True,
-                           input_field_placeholder='Выберите пункт меню...')
+                           input_field_placeholder='Виберіть пункт меню...')
 
 
-async def categories():
-    all_categories = await get_categories()
+async def regions_list():
+    all_regions = await get_regions_list()
     keyboard = InlineKeyboardBuilder()
-    for category in all_categories:
-        keyboard.add(InlineKeyboardButton(text=category.name, callback_data=f"category_{category.id}"))
-    keyboard.add(InlineKeyboardButton(text='На главную', callback_data='to_main'))
+    for region in all_regions:
+        keyboard.add(InlineKeyboardButton(text=region.name, callback_data=f"region_{region.id}"))
+    keyboard.add(InlineKeyboardButton(text='На головну', callback_data='to_main'))
     return keyboard.adjust(2).as_markup()
 
 
-async def items(category_id):
-    all_items = await get_category_item(category_id)
+async def items(region_id):
+    all_items = await get_region_item(region_id)
     keyboard = InlineKeyboardBuilder()
     for item in all_items:
-        keyboard.add(InlineKeyboardButton(text=item.name, callback_data=f"item_{item.id}"))
-    keyboard.add(InlineKeyboardButton(text='На главную', callback_data='to_main'))
+        keyboard.add(InlineKeyboardButton(text=f'Ви обрали {item.region_name} бласть,\nОфіційниф сайт футболу: {item.link},', callback_data=f"item_{item.id}"))
+    keyboard.add(InlineKeyboardButton(text='На головну', callback_data='to_main'))
     return keyboard.adjust(2).as_markup()
