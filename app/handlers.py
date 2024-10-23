@@ -11,6 +11,7 @@ router = Router()
 @router.message(CommandStart())
 async def cmd_start(message: Message):
     await rq.set_user(message.from_user.id)
+    await message.answer('Як справи?')
     await message.answer('Добро пожаловать в магазин кроссовок!', reply_markup=kb.main)
 
 
