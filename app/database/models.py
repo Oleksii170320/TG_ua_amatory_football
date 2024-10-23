@@ -1,13 +1,11 @@
-import os
-from dotenv import load_dotenv
-
 from sqlalchemy import BigInteger, String, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 
+from config import SQLALCHEMY_URL
 
-load_dotenv()
-engine = create_async_engine(url=os.getenv('SQLALCHEMY_URL'))
+
+engine = create_async_engine(url=SQLALCHEMY_URL)
 
 async_session = async_sessionmaker(engine)
 
