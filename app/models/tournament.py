@@ -17,5 +17,6 @@ class Tournament(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
     logo: Mapped[str] = mapped_column(String(120), nullable=True)
+    link: Mapped[str] = mapped_column(String(120), nullable=True)
     region_id: Mapped[int] = mapped_column(ForeignKey('regions.id'))
     type_id: Mapped[int] = mapped_column(ForeignKey('types.id'))

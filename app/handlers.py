@@ -23,10 +23,23 @@ async def reg_list(message: Message):
     await message.answer('Виберіть необхідну область', reply_markup=await kb_region.regions_list())
 
 
-# @router.callback_query(F.data.startswith('region_'))
-# async def category(callback: CallbackQuery):
-#     await callback.message.answer(f'Виберіть турнір {callback.data}',
-#                                   reply_markup=await kb.items(callback.data.split('_')[1]))
+@router.message(F.text == 'Контакти')
+async def reg_list(message: Message):
+    await message.answer('Адреса: м. Київ, вул ******* 17\n'
+                         'тел: +38-0**-***-**-88', reply_markup=kb_main.main)
+
+
+@router.message(F.text == 'Про нас')
+async def reg_list(message: Message):
+    await message.answer('Колектив любителів статистики аматорського футболу та футзалу України',
+                         reply_markup=kb_main.main)
+
+
+@router.callback_query(F.data == 'to_main')
+async def go_to_main(message: Message):
+    await set_user(message.from_user.id)
+    await message.answer('Ласкаво просимо до каналу Аматорського футболу та футзалу в України та її регіонах!',
+                         reply_markup=kb_main.main)
 
 
 @router.callback_query(F.data.startswith('region_'))
@@ -50,6 +63,7 @@ def transform_football_type(type_name: str) -> str:
     if type_name.endswith("л"):
         return type_name[:] + "у"
 
+
 @router.callback_query(F.data.startswith('type_'))
 async def get_reg_type(callback: CallbackQuery):
     data_parts = callback.data.split('_')
@@ -58,7 +72,6 @@ async def get_reg_type(callback: CallbackQuery):
         region_id = int(data_parts[3])
 
         # Отримання списку турнірів з використанням football_type_id та region_id
-        reg_type = await get_tournaments_list(football_type_id, region_id)
         region = await get_region(region_id)
         region_name = transform_region_name_to_locative(region.name).upper()
         football_type = await get_football_type(football_type_id)
@@ -66,5 +79,4 @@ async def get_reg_type(callback: CallbackQuery):
 
         await callback.message.answer(
             f'Всі турніри {football_type_name} в {region_name}:',
-            reply_markup=await kb_region.region_button(region_id)
-        )
+                                  reply_markup=await kb_region.region_tournaments(football_type_id, region_id))

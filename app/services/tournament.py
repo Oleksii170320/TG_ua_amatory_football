@@ -14,12 +14,21 @@ async def get_football_type(type_id: int):
         return await session.scalar(select(Type).where(Type.id == type_id))
 
 
+# async def get_tournaments_list(type_id, region_id):
+#     async with async_session() as session:
+#         return await session.scalars(select(Tournament).where(
+#             Tournament.type_id == type_id,
+#             Tournament.region_id == region_id)
+#         )
+
+
 async def get_tournaments_list(type_id, region_id):
     async with async_session() as session:
-        return await session.scalars(select(Tournament).where(
+        result = await session.scalars(select(Tournament).where(
             Tournament.type_id == type_id,
             Tournament.region_id == region_id)
         )
+        return list(result)
 
 
 async def get_region_tournaments(region_id):
