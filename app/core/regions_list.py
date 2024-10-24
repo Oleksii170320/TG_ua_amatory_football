@@ -123,5 +123,10 @@ regions = {
         "name": "місто Київ",
         "category": "Футбол міста Київ",
         "website": "https://ffk.kiev.ua/"
+    },
+    "Kyiv333": {
+        "name": "місто Київ",
+        "category": "Футбол міста Київ",
+        "website": "https://ffk.kiev.ua/"
     }
 }
